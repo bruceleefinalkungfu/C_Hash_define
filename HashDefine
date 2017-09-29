@@ -3,17 +3,37 @@ package zin.hashdefine;
 import java.io.Serializable;
 
 public class ZinHashDefineBO implements Serializable{
-	public static final String variableName = "zinVarYuuio";
+
+	private static final long serialVersionUID = -6130448867846402587L;
+	
+	public static final String DEFAULT_VARIABLE_NAME = "~`_`~)";
+	
 	private enum Type{
 		VARIABLE, FUNCTION;
 	}
 	private Type type;
+	
 	private String definitionName;
+	
 	private Value value;
+	
 	private static class Value{
-		
+		public Value(String value, String...params){
+			String[] arr = new String[]{value};
+			int i=0;
+			for(String param : params){
+				replaceParamNameByDefaultVarName(arr, param, i++);
+			}
+		}
+		private void replaceParamNameByDefaultVarName(String[] valArr, String rep, int i){
+			String val = valArr[0];
+			if(rep.contains("`"))
+				throw new RuntimeException("Parameter can't have this special character in it -> `");
+			val.replaceAll(rep, DEFAULT_VARIABLE_NAME+i);
+		}
 	}
 }
+
 package zin.hashdefine;
 
 import zin.file.ZinFile;
